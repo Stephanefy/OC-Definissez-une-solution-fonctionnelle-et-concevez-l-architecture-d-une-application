@@ -1,0 +1,56 @@
+<div class="max-w-5xl mx-auto flex items-start justify-between mt-11 space-x-9">
+  <div
+    class="w-11/12 flex flex-col items-start justify-center bg-slate-100 p-3 rounded-md"
+  >
+    <h2 class="text-3xl">Nouveaux messages</h2>
+    <div class="w-full flex justify-between py-3">
+        <div>Status</div>
+        <div>Nom du client</div>
+    </div>
+    <ul *ngFor="let message of newMessages" class="w-full flex flex-col">
+      <li
+        *ngIf="message.fromClient"
+        class="w-full p-3 my-2 flex items-center justify-between hover:cursor-pointer bg-blue-500 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out hover:bg-blue-700 hover:shadow-lg"
+        (click)="navigateToChatBoard(message.senderName, message.senderId)"
+      >
+        <span class="relative flex h-3 w-3">
+          <span
+            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"
+          ></span>
+          <span
+            class="relative inline-flex rounded-full h-3 w-3 bg-green-500"
+          ></span>
+        </span>
+        <p class="mx-2">
+          {{ message.senderName }}
+        </p>
+      </li>
+    </ul>
+</div>
+<div class="max-w-5xl mx-auto flex items-start justify-between space-x-9">
+  <div class="bg-slate-100 p-3 rounded-md">
+    <h2 class="text-2xl text-center">Discussions en cours</h2>
+    <ul *ngFor="let message of currentMessages" class="w-full flex flex-col">
+      <li
+        class="w-full p-3 my-2 flex items-center justify-between hover:cursor-pointer bg-blue-500 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out hover:bg-blue-700 hover:shadow-lg"
+        (click)="navigateToChatBoard(message.senderName, message.senderId)"
+      >
+        <span class="relative flex h-3 w-3">
+          <span
+            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"
+          ></span>
+          <span
+            class="relative inline-flex rounded-full h-3 w-3 bg-green-500"
+          ></span>
+        </span>
+        <p class="mx-2">
+          {{ message.senderName }}
+        </p>
+        <!-- <span>
+          {{ clientMessages.length }}
+        </span> -->
+      </li>
+    </ul>
+  </div>
+
+</div>

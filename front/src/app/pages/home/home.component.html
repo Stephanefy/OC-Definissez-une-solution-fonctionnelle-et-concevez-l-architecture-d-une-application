@@ -1,0 +1,45 @@
+<div class="w-full flex flex-col justify-center h-screen">
+  <div
+    class="h-full bg-[url('/assets/images/16672296983742_P12_banner.png')] bg-center bg-cover"
+  ></div>
+  <h1 class="text-3xl text-center">Bienvenue sur le support client</h1>
+
+  <div class="p-3 flex flex-col justify-center lg:w-5/12 mx-auto">
+    <h2 *ngIf="isAdmin; else nAdmin" class="text-2xl mx-auto font-semibold">
+      Connexion assistant
+    </h2>
+  </div>
+  <ng-template #nAdmin>
+    <h2 *ngIf="!currentAuthStatus" class="text-2xl mx-auto font-bold">
+      Connexion client
+    </h2>
+    <h2 *ngIf="currentAuthStatus" class="text-2xl mx-auto font-bold">
+      Vous êtes en ligne
+    </h2>
+  </ng-template>
+  <div id="hero-image" class=""></div>
+  <div
+    *ngIf="isAdmin; else notAdmin"
+    class="p-3 flex flex-col justify-center lg:w-5/12 mx-auto"
+  >
+    <div class="p-3 border-2 border-red-500 rounded-lg mb-2">
+      <p class="font-semibold">
+        Seuls les assistants sont autorisés à se connecter via ce formulaire
+      </p>
+    </div>
+    <app-login-admin-form></app-login-admin-form>
+  </div>
+  <ng-template #notAdmin>
+    <div class="p-3 flex flex-col justify-center lg:w-5/12 mx-auto">
+      <div class="p-3 border-2 border-blue-500 rounded-lg mb-2">
+        <p>
+          Pour toutes questions relatives à vos locations, n'hésitez pas à nous
+          contacter à travers le chat, entrez vos identifiants, vous serez
+          directement connecté à une session. Un assistant vous répondra dans
+          les plus bref délais.
+        </p>
+      </div>
+      <app-login-chat-form></app-login-chat-form>
+    </div>
+  </ng-template>
+</div>

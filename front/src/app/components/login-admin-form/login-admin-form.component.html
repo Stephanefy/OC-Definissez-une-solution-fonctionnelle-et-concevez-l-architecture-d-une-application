@@ -1,0 +1,31 @@
+
+  
+  <form [formGroup]="loginForm" class="flex flex-col w-12/12 bg-red-500 rounded-md p-4">
+    <div class="p-3">
+      <label class="inline-block w-full text-white font-semibold mb-2">identifiant assistant</label>
+      <input
+        id="username"
+        formControlName="username"
+        class="p-3 rounded-md w-full"
+        type="text"
+        placeholder="votre identifant assistant"
+      />
+    </div>
+    <div class="p-3">
+      <label class="inline-block w-full text-white font-semibold mb-2">Mot de passe</label>
+      <input
+        id="password"
+        formControlName="password"
+        class="p-3 border-slate-700 border-2 rounded-md w-full"
+        type="password"
+        placeholder="votre identifant client"
+      />
+    </div>
+    <button
+      (click)="login()"
+      class="mx-auto w-[200px] bg-slate-300  text-slate-700 hover:text-blue-800 font-bold py-2 px-4 rounded my-2"
+    >
+      Accéder au tableau de bord
+    </button>
+  </form>
+  

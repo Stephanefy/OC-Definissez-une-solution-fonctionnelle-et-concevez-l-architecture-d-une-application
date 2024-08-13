@@ -1,0 +1,43 @@
+<form
+  *ngIf="!this.authStatus; else loggedIn"
+  [formGroup]="loginForm"
+  class="flex flex-col w-12/12 justify-center bg-blue-500 rounded-md lg:p-4"
+>
+  <div class="p-3">
+    <label class="inline-block w-full text-white font-semibold mb-2">identifiant client</label>
+    <input
+      id="username"
+      formControlName="username"
+      class="p-3 border-blue-500 border-2 rounded-md w-full"
+      type="text"
+      placeholder="votre identifant client"
+    />
+  </div>
+  <div class="p-3">
+    <label class="inline-block w-full text-white font-semibold mb-2">Mot de passe</label>
+    <input
+      id="password"
+      formControlName="password"
+      class="p-3 border-blue-500 border-2 rounded-md w-full"
+      type="password"
+      placeholder="votre identifant client"
+    />
+  </div>
+  <button
+    (click)="login(currentUser!.username, currentUser!.id)"
+    class="mx-auto w-[200px] bg-slate-300  text-slate-700 hover:text-blue-800 font-bold py-2 px-4 rounded my-2"
+  >
+    Lancer la discussion
+  </button>
+</form>
+
+<ng-template #loggedIn>
+  <div class="flex justify-center">
+    <button
+      class="mx-auto w-[200px] border border-blue-800 text-blue-500 hover:bg-blue-500 hover:text-white font-bold py-2 px-4 rounded my-2"
+      (click)="navigateToChatBoard(currentUser!.username, currentUser!.id)"
+    >
+      Rejoindre la discussion
+    </button>
+  </div>
+</ng-template>

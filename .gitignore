@@ -1,0 +1,10 @@
+/.history
+/front/node_modules
+/front/.vscode
+
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+/back/src/main/resources/application.properties
