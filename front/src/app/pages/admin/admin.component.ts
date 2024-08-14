@@ -56,6 +56,7 @@ export class AdminComponent implements OnInit {
     this.messageService
       .getRelatedChatSessions(this.currentUser!.id)
       .subscribe((sessions) => {
+        console.log(sessions);
         this.currentMessages = [...sessions];
       });
 

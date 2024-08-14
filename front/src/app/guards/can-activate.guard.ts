@@ -12,7 +12,6 @@ export const canActivateGuard: CanActivateFn = (route, state) => {
   return authService.currentAuthStatus$.pipe(
     map(
       (authStatus: boolean) => {
-        console.log(authStatus)
         if (!authStatus) {
           router.navigate(['/']);
           return false;

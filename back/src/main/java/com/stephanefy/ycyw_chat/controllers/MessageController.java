@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Log4j2
@@ -84,8 +87,12 @@ public class MessageController {
 
 
         }
+        Set<String> seenSenderName = new HashSet<>();
+        List<ChatSession> uniqueChatSessions = allRelatedChatSessions.stream()
+                .filter(chatSession -> seenSenderName.add(chatSession.getSenderName()))
+                .collect(Collectors.toList());
 
-        return new ResponseEntity<List<ChatSession>>(allRelatedChatSessions, HttpStatus.OK);
+        return new ResponseEntity<List<ChatSession>>(uniqueChatSessions, HttpStatus.OK);
     }
 
 

@@ -2,7 +2,6 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
-  NgForm,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -13,7 +12,7 @@ import { UserDetails } from '../../models/UserDetails';
 import { nanoid } from 'nanoid';
 import { MessageService } from '../../services/message.service';
 import { Router } from '@angular/router';
-import { concatMap, map, Observable, tap } from 'rxjs';
+import { concatMap, map, Observable, Subscription, tap } from 'rxjs';
 import { StateService } from '../../services/state.service';
 import { UserService } from '../../services/user.service';
 
@@ -36,10 +35,10 @@ export class ChatBoardComponent implements OnInit {
   receiverName!: string;
 
   messages: Message[] = [];
+  subscription!: Subscription;
 
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {
-    
     if (event.key === 'Enter') {
       event.preventDefault();
       this.sendMessage();
@@ -73,48 +72,37 @@ export class ChatBoardComponent implements OnInit {
       .getSupportDetails()
       .pipe(
         map((res) => {
-          console.log('getting support details', res.id);
           this.currentSupportId = res.id;
         }),
         concatMap(() => {
           this.currentUser = JSON.parse(
             localStorage.getItem('currentUser') || '{}'
           );
-          console.log('session data from session data', this.sessionData);
           return this.messageService.getChatMessages(
             this.currentUser!.id,
             this.sessionData.senderId
           );
         }),
-        map((mes) => {
-          console.log('messages form getChatMessages', mes);
-          if (mes) {
-            this.messages = mes;
+        map((chatMessages) => {
+          if (chatMessages) {
+            this.messages = chatMessages;
           }
         }),
         concatMap(() => {
-          console.log('how is the list now?', this.messages);
           return this.messageService.getChatMessages(
             this.currentSupportId,
             this.sessionData.senderId
           );
         })
       )
-      .subscribe((mes) => {
-        console.log('messages form getChatMessages 2', mes);
-        if (mes) {
-          this.messages = mes;
+      .subscribe((chatMessages) => {
+        if (chatMessages) {
+          this.messages = chatMessages;
         }
       });
 
-    // if (this.currentUser!.role === "CLIENT") {
-
-    // }
-
-    //@ts-ignore
     this.subscription = this.stateService.receiverName$.subscribe((name) => {
       this.receiverName = name;
-      // Perform any additional logic here
     });
 
     this.webSocketService
@@ -123,34 +111,22 @@ export class ChatBoardComponent implements OnInit {
         `/support-tickets/${this.currentUser?.username}/support-tickets/added-tickets`
       )
       .subscribe((message: any) => {
-        console.log('this watch method is reached', message);
-        // this.messageService.getChatMessages(this.currentUser!.id, this.currentSupportId).subscribe(mes => {
-        //   console.log("messages", mes);
-        // });
+        const realTimeMessage = JSON.parse(message.body);
 
-        console.log('all messages', message);
-        //@ts-ignore
-        console.log('reached', message.body);
-        //@ts-ignore
-        this.messages.push(JSON.parse(message.body));
-        console.log('current messageses', this.messages);
+        if (realTimeMessage.senderName === this.sessionData.username) {
+          this.messages.push(realTimeMessage);
+        }
       });
   }
 
   publishMessage(content: string): void {
     if (this.currentUser!.role === 'SUPPORT') {
-      console.log(this.messages[0]);
       this.receiverId = this.sessionData.senderId;
       this.receiverName = this.sessionData.username;
-      console.log('this receiverName', this.receiverName);
     } else {
       this.receiverId = this.currentSupportId;
       this.receiverName = 'Steve';
     }
-
-    console.log('this receiverId', this.receiverId);
-    console.log('this current support id', this.currentSupportId);
-    console.log('this.currentUser id', this.currentUser?.id);
 
     const message: Message = {
       id: nanoid(),
@@ -162,13 +138,10 @@ export class ChatBoardComponent implements OnInit {
       receiverName: this.receiverName,
       createdOn: new Date(),
     };
-    // this.webSocketService.send(message);
-    this.webSocketService
-      .getClient()!
-      .publish({
-        destination: '/support-dashboard/new-request',
-        body: JSON.stringify(message),
-      });
+    this.webSocketService.getClient()!.publish({
+      destination: '/support-dashboard/new-request',
+      body: JSON.stringify(message),
+    });
 
     this.messages.push(message);
   }
@@ -192,9 +165,7 @@ export class ChatBoardComponent implements OnInit {
   }
 
   sendMessage(): void {
-    console.log('is form valid', this.form);
     if (this.form.controls['content'].status === 'VALID') {
-      console.log('reached');
       this.publishMessage(this.form.value.content);
     }
     this.getFormValidationErrors();

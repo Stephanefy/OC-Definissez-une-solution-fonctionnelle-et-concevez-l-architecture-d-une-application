@@ -23,31 +23,13 @@ export class AppComponent implements OnInit{
 
   title = 'Your-Car-Your-Way support';
 
-  // messages: Message[] = [];
 
-  // form: FormGroup = new FormGroup({
-  //   title: new FormControl<string>('', Validators.required),
-  //   content: new FormControl<string>("what is your issue ?" , Validators.required)
-  // });
 
   constructor(private webSocketService: WebsocketService, private rxStompService : RxStompService) {
   }
 
   ngOnInit(): void {
     console.log("test")
-    // console.log("fklsfklsdkl")
-    // // this.webSocketService.listen(message => {
-    // //   console.log("message coming from listener",message)
-    // //   this.messages.push(message);
-    // // });
-    // //@ts-ignore
-    // this.rxStompService.watch('/support-tickets/added-tickets').subscribe((message: Message) => {
-    //   //@ts-ignore
-    //   console.log(message.body)
-    //   //@ts-ignore
-    //   this.messages.push(JSON.parse(message.body));
-    //   console.log(this.messages)
-    // });
   }
 
 

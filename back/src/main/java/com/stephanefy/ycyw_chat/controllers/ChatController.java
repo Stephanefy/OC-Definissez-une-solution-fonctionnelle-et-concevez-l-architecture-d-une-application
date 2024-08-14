@@ -52,6 +52,8 @@ public class ChatController {
     public Message sendMessage(@RequestBody  Message chatMessage, SimpMessageHeaderAccessor headerAccessor) throws InterruptedException {
         String sessionId = headerAccessor.getSessionId();
 
+        log.info("headerAccessor {}", headerAccessor);
+
         messageService.saveMessage(chatMessage);
         Thread.sleep(1000);  // Simulated delay
 

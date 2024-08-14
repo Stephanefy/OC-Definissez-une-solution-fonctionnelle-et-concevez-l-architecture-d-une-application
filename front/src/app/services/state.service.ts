@@ -32,7 +32,6 @@ export class StateService {
   }
 
   setIsAdmin(bool: boolean) {
-    console.log('reached');
     this.isAdminSubject.next(bool);
   }
 

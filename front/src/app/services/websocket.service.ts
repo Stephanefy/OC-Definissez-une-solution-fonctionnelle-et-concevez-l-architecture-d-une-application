@@ -28,13 +28,11 @@ export class WebsocketService implements OnDestroy {
 
   private initializeWS(): void {
     if (this.client === undefined) {
-      console.log("websocket service constructor is reached");
       const rxStompService = new RxStompService();
 
       rxStompService.configure(myRxStompConfig);
       rxStompService.activate();
 
-      console.log(rxStompService);
 
       this.client = rxStompService;
     }
